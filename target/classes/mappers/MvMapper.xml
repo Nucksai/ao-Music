@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.IMvMapper">
+    <resultMap id="mvMap" type="Mv">
+        <id property="id" column="m_id"/>
+        <result property="name" column="m_name"/>
+        <result property="images" column="m_images"/>
+        <result property="address" column="mv_address"/>
+        <result property="singerId" column="mv_singerId"/>
+        <result property="type" column="mv_type"/>
+        <result property="hot" column="my_hot"/>
+        <result property="maddress" column="my_maddress"/>
+    </resultMap>
+
+    <!--删除MV-->
+    <update id="deletMv" parameterType="java.lang.Integer">
+        update mv set is_delete=0 where m_id=#{mid}
+    </update>
+
+    <!--遍历单条-->
+    <select id="getMv" resultMap="mvMap">
+        select * from mv where m_id=#{mid} and is_delete=1;
+    </select>
+
+    <!--修改Mv-->
+    <update id="updateMv" parameterType="java.lang.Integer">
+        update mv set m_name=#{mv.name},m_images=#{mv.images},mv_address=#{mv.address},mv_singerId=#{mv.singerId},mv_type=#{mv.type},my_hot=#{mv.hot},my_maddress=#{mv.maddress} where m_id=#{mv.id};
+    </update>
+
+    <!--添加-->
+    <insert id="addMv" parameterType="java.lang.Integer">
+        insert  into  mv(m_name,m_images,mv_address,mv_singerId,mv_type,my_hot,my_maddress) values (#{mv.name},#{mv.images},#{mv.address},#{mv.singerId},#{mv.type},#{mv.hot},#{mv.maddress});
+    </insert>
+
+
+    <!--遍历分页mv-->
+    <select id="traMv" resultMap="mvMap">
+       select * from mv where id_delete=1 LIMIT #{offest},#{pageSize};
+    </select>
+
+    <!--Mv热度排行-->
+    <select id="upMv" resultMap="mvMap">
+       select * from Mv where is_delete=1 ORDER BY my_hot DESC LIMIT  #{offest},#{pageSize};
+    </select>
+
+    <!--总行数-->
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(*) from  mv where is_delete=1;
+    </select>
+</mapper>

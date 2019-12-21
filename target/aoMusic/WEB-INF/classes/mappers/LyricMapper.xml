@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.ILyricMapper">
+    <resultMap id="lyricMap" type="Lyric">
+        <id property="id" column="ly_id"/>
+        <result property="name" column="ly_name"/>
+        <result property="address" column="ly_address"/>
+    </resultMap>
+
+    <!--查询歌词-->
+    <select id="traLyric" resultMap="lyricMap">
+       select * from lyric where id_delete=1 LIMIT #{offest},#{pageSize};
+    </select>
+
+    <!--查询单条数据-->
+    <select id="getLyric" resultMap="lyricMap">
+        select * from  lyric where ly_id = #{lid} ;
+    </select>
+
+    <!--删除歌词-->
+    <update id="deleteLyric" parameterType="java.lang.Integer">
+        update  lyric set is_delete=0 where ly_id=#{lid}
+    </update>
+
+    <!--添加歌词-->
+    <insert id="addLyric" parameterType="java.lang.Integer">
+        insert into  lyric(ly_name,ly_address) values (#{lyric.name},#{lyric.address});
+    </insert>
+
+    <!--修改歌词-->
+    <update id="updateLyric" parameterType="java.lang.Integer">
+        update lyric set  ly_name=#{lyric.name},ly_address=#{lyric.address} and  ly_id=#{lyric.id};
+    </update>
+</mapper>

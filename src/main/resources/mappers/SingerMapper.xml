@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qf.mapper.ISingerMapper">
+    <resultMap id="sinMap" type="Singer">
+        <id property="id" column="si_id" />
+        <result property="name" column="si_name"/>
+        <result property="sex" column="si_sex"/>
+        <result property="imger" column="si_imger"/>
+        <result property="introduec" column="si_introduec"/>
+        <result property="type" column="si_type"/>
+        <result property="letter" column="si_letter"/>
+        <result property="hot" column="si_hot"/>
+    </resultMap>
+    <!--添加歌手-->
+    <insert id="addSinger"  keyProperty="sin.id" useGeneratedKeys="true">
+        insert into singer(si_name,si_sex,si_imger,si_introduec,si_type,si_letter) VALUES(#{sin.name},#{sin.sex},#{sin.imger},#{sin.introduec},#{sin.type},#{sin.letter});
+    </insert>
+
+    <!--删除歌手-->
+    <update id="deleteSinger" parameterType="java.lang.Integer">
+        update singer set is_delete=0 where si_id=#{sid};
+    </update>
+
+    <!--查询分页歌手-->
+    <select id="traSinger" resultMap="sinMap">
+       select * from singer where is_delete=1 LIMIT #{offset},#{pageSize};
+    </select>
+
+    <!--查询单挑数据-->
+    <select id="getSinger" resultMap="sinMap">
+        select * from  Singer where si_id = #{sid} ;
+    </select>
+
+    <!--修改全部-->
+    <update id="updateSinger" parameterType="java.lang.Integer">
+        update singer set si_name=#{sin.name},si_sex=#{sin.sex},si_imger=#{sin.imger},si_introduec=#{sin.introduec},si_type=#{sin.type},si_letter=#{sin.letter} where si_id=#{sin.id};
+    </update>
+
+    <!--歌手热度排行-->
+    <select id="upSinger" resultMap="sinMap">
+       select * from singer where is_delete=1 ORDER BY si_hot DESC LIMIT  #{offset},#{pageSize};
+    </select>
+
+    <!--查询总条数-->
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(*) from  singer where is_delete = 1;
+    </select>
+</mapper>
